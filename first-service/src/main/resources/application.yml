@@ -1,0 +1,17 @@
+server:
+  port: 0
+
+spring:
+  application:
+    name: first-service
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka/
+  instance:
+    # 랜덤 포트번호를 부여하게 되면 유레카가 여러 서비스를 구분하지 못하는 상황이 발생
+    # 고유한 인스턴스 아이디를 직접 부여해서 유레카가 각 서비스를 구분할 수 있게끔 지정.
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.instance_id:${random.value}}
