@@ -18,6 +18,11 @@ spring:
     redis:
       host: localhost
       port: 6379
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
   # /actuator/refresh를 호출하면 yml의 내용이 초기화되면서 새로 설정됩니다.
   # 그 과정에서 갱신 대상에 포함되지 않는 애들이 있는데, 걔네들을 명시적으로 refresh 대상에 포함시키라는 설정
   cloud:
@@ -45,7 +50,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans
+        include: refresh, health, beans, busrefresh
 
 
 
