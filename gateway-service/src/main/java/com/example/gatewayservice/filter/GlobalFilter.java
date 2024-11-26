@@ -2,6 +2,7 @@ package com.example.gatewayservice.filter;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -12,6 +13,9 @@ import reactor.core.publisher.Mono;
 @Component
 @Slf4j
 public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Config> {
+
+    @Value("${token.secret")
+    private String tokenSecret;
 
     // Filter가 빈으로 등록될 때 부모 클래스의 생성자로
     // 이미 정적(static)으로 세팅된 특정 설정값을 전달합니다.
@@ -28,6 +32,8 @@ public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Conf
             ServerHttpResponse response = exchange.getResponse();
 
             log.info("Global filter active! baseMessage = {}", config.getBaseMessage());
+            log.info("tokenSecret = {}", tokenSecret);
+
             if (config.isPreLogger()) {
                 log.info("Global Filter called! Request URI: {}", request.getURI());
             }

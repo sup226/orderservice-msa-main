@@ -22,10 +22,10 @@ spring:
 
 jwt:
   expiration: 30
-  secretKey: rI9KLc/nWq+0ehvbQXjST52lIHi+A4PurdKwAe0ZcN+0LE1QBv7p0qhFx8wzt8PaigtMXpJHdIl6p4ILsLDasA==
+  secretKey: +Wpu19RQrd9GaG41rBWlQuObyi9Ac/NiHfciyH0CNrNh8USmoVGFYy2ik2NH0q+wEEZ05Ir4JQcspuQ96yJQAA==
 
   expirationRt: 14400
-  secretKeyRt: lGBm6kwqJoKjLioZfyYJ+OTstjyczTbf7tJXar1pQ2PDSeg5LZQ30DXDlLbM7zKiysBfPkdv6KTVOJ+UcL5C6g==
+  secretKeyRt: vlkWoV6DWP02+VvsVaje2Nbie1MVQL3TJwIgWHtCM6sGlK8Bg+CmIPRKZsga2ptnFreGdyeJz4+Hv/xiKQbzgw==
 
 eureka:
   client:

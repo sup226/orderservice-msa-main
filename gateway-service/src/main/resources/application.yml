@@ -1,6 +1,6 @@
 
 server:
-  port: 8080
+  port: 8000
 
 spring:
   application:
@@ -19,6 +19,15 @@ spring:
           predicates:
             - Path=/user-service/doLogin
             - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/actuator/**
+            - Method=GET, POST
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
@@ -85,9 +94,13 @@ eureka:
 
 jwt:
   expiration: 30
-  secretKey: rI9KLc/nWq+0ehvbQXjST52lIHi+A4PurdKwAe0ZcN+0LE1QBv7p0qhFx8wzt8PaigtMXpJHdIl6p4ILsLDasA==
+  secretKey: +Wpu19RQrd9GaG41rBWlQuObyi9Ac/NiHfciyH0CNrNh8USmoVGFYy2ik2NH0q+wEEZ05Ir4JQcspuQ96yJQAA==
 
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, httpexchanges
 
 
 

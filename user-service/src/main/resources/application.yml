@@ -18,13 +18,18 @@ spring:
     redis:
       host: localhost
       port: 6379
+  # /actuator/refresh를 호출하면 yml의 내용이 초기화되면서 새로 설정됩니다.
+  # 그 과정에서 갱신 대상에 포함되지 않는 애들이 있는데, 걔네들을 명시적으로 refresh 대상에 포함시키라는 설정
+  cloud:
+    refresh:
+      extra-refreshable: com.zaxxer.hikari.HikariDataSource
 
 jwt:
   expiration: 30
-  secretKey: rI9KLc/nWq+0ehvbQXjST52lIHi+A4PurdKwAe0ZcN+0LE1QBv7p0qhFx8wzt8PaigtMXpJHdIl6p4ILsLDasA==
+  secretKey: +Wpu19RQrd9GaG41rBWlQuObyi9Ac/NiHfciyH0CNrNh8USmoVGFYy2ik2NH0q+wEEZ05Ir4JQcspuQ96yJQAA==
 
   expirationRt: 14400
-  secretKeyRt: lGBm6kwqJoKjLioZfyYJ+OTstjyczTbf7tJXar1pQ2PDSeg5LZQ30DXDlLbM7zKiysBfPkdv6KTVOJ+UcL5C6g==
+  secretKeyRt: vlkWoV6DWP02+VvsVaje2Nbie1MVQL3TJwIgWHtCM6sGlK8Bg+CmIPRKZsga2ptnFreGdyeJz4+Hv/xiKQbzgw==
 
 eureka:
   client:
@@ -34,3 +39,22 @@ eureka:
       defaultZone: http://127.0.0.1:8761/eureka/
   instance:
     instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+
+# 액츄에이터 등록 (beans: 컨테이너에 등록된 빈 보여줌. health: 서버 살아있는지 알려줌)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans
+
+
+
+
+
+
+
+
+
+
+
+
