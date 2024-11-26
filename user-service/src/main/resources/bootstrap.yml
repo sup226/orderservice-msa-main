@@ -4,6 +4,6 @@ spring:
   cloud:
     config:
       uri: http://localhost:8888
-      name: orderservice
-  profiles:
-    active: dev
+      name: user-service
+#  profiles:
+#    active: dev

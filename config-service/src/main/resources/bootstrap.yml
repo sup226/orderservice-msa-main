@@ -1,0 +1,6 @@
+encrypt:
+#  key: abcdfghihk123456789222abcdzzz
+  key-store:
+    location: file:C:\\Users\\playdata2\\keystore\\apiEncryptionKey.jks
+    password: abc1234
+    alias: apiEncryptionKey
