@@ -1,14 +1,18 @@
 server:
   port: 0
 
+jasypt:
+  encryptor:
+    bean: jasyptEncrypter
+
 spring:
   application:
     name: user-service
-#  datasource:
-#    url: jdbc:mysql://localhost:3306/orderservice?serverTimezone=Asia/Seoul
-#    username: root
-#    password: mysql
-#    driver-class-name: com.mysql.cj.jdbc.Driver
+  datasource:
+    url: jdbc:mysql://localhost:3306/orderservice?serverTimezone=Asia/Seoul
+    username: root
+    password: mysql
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect

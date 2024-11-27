@@ -1,5 +1,6 @@
 package com.playdata.userservice.common.configs;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
+@Slf4j
 public class RedisConfig {
 
     @Value("${spring.data.redis.host}")
@@ -30,6 +32,7 @@ public class RedisConfig {
     // 같은 타입의 빈을 구분할 수 있도록 @Qualifier를 붙여서 구분한다.
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
+        log.info("암호화 된 redis의 host 값: {}", host);
         configuration.setHostName(host);
         configuration.setPort(port);
         configuration.setDatabase(1); // 1번 DB를 사용하겠다. default -> 0
