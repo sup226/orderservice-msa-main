@@ -18,10 +18,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.engine.jdbc.internal.DDLFormatterImpl;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -45,6 +44,8 @@ public class OrderingService {
     // feign client 구현체 주입 받기
     private final UserServiceClient userServiceClient;
     private final ProductServiceClient productServiceClient;
+
+    private final CircuitBreakerFactory circuitBreakerFactory;
 
     public Ordering createOrdering(List<OrderingSaveReqDto> dtoList,
                                    TokenUserInfo userInfo) {
@@ -111,7 +112,16 @@ public class OrderingService {
 
         String userEmail = userInfo.getEmail();
         // feign client 이용해서 user 정보 얻어오기
-        CommonResDto<UserResDto> byEmail = userServiceClient.findByEmail(userEmail);
+//        CommonResDto<UserResDto> byEmail = userServiceClient.findByEmail(userEmail);
+
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker1");
+
+        CommonResDto<UserResDto> byEmail = circuitBreaker.run(() -> userServiceClient.findByEmail(userEmail), throwable -> null);
+
+        if (byEmail == null) {
+            log.error("byEMail is null");
+        }
+
         UserResDto userResDto = byEmail.getResult();
 
         // 해당 사용자의 주문 내역 전부 가져오기.
@@ -122,8 +132,12 @@ public class OrderingService {
         List<Long> productIds = getProductIds(orderingList);
 
         // Product-service에게 상품 정보를 달라고 요청해야 함.
-        CommonResDto<List<ProductResDto>> products
-                = productServiceClient.getProducts(productIds);
+        CommonResDto<List<ProductResDto>> products =
+                circuitBreaker.run(
+                        () -> productServiceClient.getProducts(productIds),
+                        throwable -> new CommonResDto<>(HttpStatus.OK, "server error", new ArrayList<>())
+                );
+
         List<ProductResDto> dtoList = products.getResult();
 
         // product-service에게 받아온 리스트를 필요로 하는 정보로만 맵으로 매핑.
